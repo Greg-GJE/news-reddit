@@ -26,7 +26,12 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    position: relative;
+
+}
+
+.nav-header {
+    margin: 1.2rem 2rem;
+    text-align: left;
 }
 
 .heading-container {
