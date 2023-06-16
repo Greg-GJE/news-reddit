@@ -6,6 +6,20 @@
     <title>Document</title>
 </head>
 <body>
-    <p>This will contain the list of news here</p>
+    <nav>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'users:logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'users:login' %}">Login</a>
+        {% endif %}
+        <a href=""></a>
+    </nav>
+    <div>
+        {% if request.user.is_authenticated %}
+            <p>{{ request.user.username }} </p>
+        {% else %}
+            <p>Anonymous user</p>
+        {% endif %}
+    </div>
 </body>
 </html>
