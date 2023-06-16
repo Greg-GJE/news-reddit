@@ -60,8 +60,23 @@ def register_user(request):
             messages.error(request, 'Email already exists. Try to login')
             return redirect(reverse('users:register'))
 
-        # now try to save the user
 
+        # now try to save the user
+        user = user_model.objects.create(
+            first_name = first_name,
+            last_name = last_name,
+            username = username,
+            email = email
+        )
+
+        # setting the password
+        user.set_password(password)
+
+        
+        user.save()
+
+        messages.success(request, 'User created successfully! Login now')
+        return redirect(reverse('users:login'))
 
     elif request.method == constants.GET:
         return render(request, 'users/register.html')

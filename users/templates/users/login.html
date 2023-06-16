@@ -9,7 +9,7 @@
     {% if messages %}
         <div role="alert">
             {% for message in messages %}
-                {{ message }}
+                {{message.tags}} -> {{ message }}
             {% endfor %}
         </div>
     {% endif %}
@@ -17,11 +17,11 @@
         {% csrf_token %}
         <div>
             <label for="username">Enter Username</label>
-            <input type="text" id="username" name="username" autocomplete="false">
+            <input type="text" id="username" name="username" autocomplete="false" required>
         </div>
         <div>
             <label for="password">Enter Password</label>
-            <input type="password" id="password" name="password" autocomplete="false">
+            <input type="password" id="password" name="password" autocomplete="false" required>
         </div>
         <div>
             Don't have an account? <a href="{% url 'users:register' %}">Register here</a>
