@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap');
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    width: 100%;
+    font-family: 'Open Sans', 'sans-serif';
+}
+
+.main {
+    height: 100vh;
+    display: flex;
+    flex-direction: horizontal;
+}
+
+#img-background {
+    min-width: 40%;
+    background: linear-gradient(180deg, rgba(51,51,51,1) 0%, rgba(150,5,5,0.5) 100%), url('../../images/register_background.jpg') no-repeat right top;
+    background-size: cover;
+
+    /* defining the layout */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+.heading-container {
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.heading {
+    color: #fff;
+    font-family: 'Roboto Slab', 'serif';
+    font-size: 2.8rem;
+
+}
+
+.header_span {
+    display: block;
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+.heading_content {
+    font-size: 1.5rem;
+    color: #fff;
+    margin: 2rem auto;
+}
+
+
+#register-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.register_header {
+    text-align: center;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.login_redirect {
+    text-align: center;
+    margin: 1.5rem 0 2.5rem 0;
+}
+
+
+
+form {
+    max-width: 60%;
+    display: block;
+    margin: 1.5rem auto;
+}
+
+form label {
+    display: block;
+    font-size: 0.9rem;
+}
+
+form input {
+    width: 100%;
+    padding: 0.6rem;
+    margin-top: 0.4rem;
+}
+
+.form-row {
+    width: 100%;
+    display: block;
+    margin: 1rem 0;
+}
+
+.name_input_section {
+    display: flex;
+    flex-direction: horizontal;
+    justify-content: space-between;
+}
+
+.name_input_section > div {
+    width: 100%;
+}
+
+.name_input_section > div:first-child {
+    margin-right: 1.2rem;
+}
+
+.name_input_section > div:nth-child(2) {
+    margin-left: 1.2rem;
+}
+
+.hint {
+    color: rgb(72, 72, 72);
+}
+
+.messages-section {
+    max-width: 60%;
+    margin: 2rem auto;
+}
+
+.error {
+    display: flex;
+    padding: 0.3rem 0.5rem;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgb(255, 56, 56);
+    background-color: rgb(255, 224, 221);
+    color: rgb(128, 0, 0);
+}
+
+
+
+.error button {
+    background-color: transparent;
+    border: none;
+    padding: 0.3rem 0.8rem;
+}
+
+.submit {
+    width: 100%;
+    padding: 0.8rem;
+    margin-top: 1.3rem;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+  }

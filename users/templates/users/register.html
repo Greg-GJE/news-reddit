@@ -1,55 +1,88 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
+    <link href="{% static 'users/css/register.css' %}" rel="stylesheet" />
 </head>
+
 <body>
-    <main>
-        <section></section>
-        <section>
-            <div>
-                <h1>Join RedNews</h1>
+    <main class="main">
+        <section id="img-background">
+            <div class="nav-header">
+                <img src="{% static 'images/logo_header.svg' %}" alt="" />
             </div>
-            <div>
-                <p>Already have an account? <a href="{% url 'users:login' %}">Login</a></p>
+            <div class="heading-container">
+                <h1 class="heading">
+                    Latest and Greatest News
+                    <span class="header_span">Now at your fingertips!</span>
+                </h1>
+                <div class="heading_content">
+                    Access the latest news driven by the community, for the community.
+                </div>
             </div>
-            <div>
-                {% for message in messages %}
-                    {{message.tags}} -> {{message}}
-                {% endfor %}
+            <div class="nav-footer">
+                <div>Footer</div>
             </div>
-            <form method="post">
-                {% csrf_token %}
-                <!-- user registration form here -->
-                <div class="form-row">
-                    <div>
-                        <label for="first_name">First Name</label>
-                        <input type="text" id="first_name" name="first_name">
+        </section>
+        <section id="register-section">
+            <div>
+                <div class="register_header">
+                    <h1>Join RedNews</h1>
+                </div>
+                <div class="login_redirect">
+                    <p>
+                        Already have an account?
+                        <a href="{% url 'users:login' %}">Login</a>
+                    </p>
+                </div>
+                {% if messages %}
+                    <div class="messages-section">
+                        {% for message in messages %}
+                            <small class="{{message.tags}}">
+                                <span>{{message}}</span>
+                                <button>X</button>
+                            </small>
+                        {% endfor %}
                     </div>
-                    <div>
-                        <label for="last_name">Last Name</label>
-                        <input type="text" id="last_name" name="last_name">
+                {% endif %}
+                <form method="post" autocomplete="off">
+                    <input autocomplete="false" name="hidden" type="text" class="hidden">
+                    {% csrf_token %}
+                    <!-- user registration form here -->
+                    <div class="form-row name_input_section">
+                        <div>
+                            <label for="first_name">First Name</label>
+                            <input type="text" id="first_name" name="first_name" />
+                        </div>
+                        <div>
+                            <label for="last_name">Last Name</label>
+                            <input type="text" id="last_name" name="last_name" />
+                        </div>
                     </div>
-                </div>
-                <div class="form-row">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email">
-                </div>
-                <div class="form-row">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username">
-                </div>
-                <div class="form-row">
-                    <label for="password">Password <span class="hint">(min. 8 char)</span></label>
-                    <input type="password" id="password" name="password">
-                </div>
-                <div class="form-row">
-                    <button type="submit">Join</button>
-                </div>
-            </form>
+                    <div class="form-row">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" />
+                    </div>
+                    <div class="form-row">
+                        <label for="username">Username
+                            <span class="hint">(only letters, numbers, and underscores)</span></label>
+                        <input type="text" id="username" name="username" autocomplete="new-password">
+                    </div>
+                    <div class="form-row">
+                        <label for="password">Password <span class="hint">(min. 8 char)</span></label>
+                        <input type="password" id="password" name="password" autocomplete="new-password" />
+                    </div>
+                    <div class="form-row">
+                        <button class="submit" type="submit">Join</button>
+                    </div>
+                </form>
+            </div>
         </section>
     </main>
 </body>
+
 </html>
