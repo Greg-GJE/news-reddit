@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <nav>
+   <nav>
         {% if request.user.is_authenticated %}
             <a href="{% url 'users:logout' %}">Logout</a>
         {% else %}
@@ -20,6 +20,21 @@
         {% else %}
             <p>Anonymous user</p>
         {% endif %}
+    </div>
+    <div>
+        you are visiting from {{country_code}}
+    </div>
+    <div>
+        {{featured.title}}
+    </div>
+    <div>
+        {{featured.description}}
+    </div>
+    <div>
+        <img src="{{featured.urlToImage}}" alt="{{featured.title}}">
+    </div>
+    <div>
+        <a href="{{featured.url}}" target="_blank">Read more</a>
     </div>
 </body>
 </html>

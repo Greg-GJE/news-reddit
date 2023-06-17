@@ -145,3 +145,8 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+NEWSAPI_KEY = '30bbaa4f96e24abe86c2a7606f24692f'
+GEOLOCATION_API_KEY = '0985ec660fc34cbabddbe1042f821446'
+
+GEOLOCATION_API_URL = f'https://ipgeolocation.abstractapi.com/v1/?api_key={GEOLOCATION_API_KEY}'
