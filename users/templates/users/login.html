@@ -1,34 +1,74 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'users/css/login.css' %}" />
     <title>Login</title>
-</head>
-<body>
-    {% if messages %}
-        <div role="alert">
-            {% for message in messages %}
-                {{message.tags}} -> {{ message }}
-            {% endfor %}
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-container">
+        <div class="logo-section">
+          <img src="{% static 'images/logo_header_black.svg' %}" />
         </div>
-    {% endif %}
-    <form method="post" autocomplete="off">
-        {% csrf_token %}
-        <div>
-            <label for="username">Enter Username</label>
-            <input type="text" id="username" name="username" autocomplete="false" required>
+        <div class="form-header">
+          <h1>Login</h1>
+          <p>Welcome back.</p>
         </div>
-        <div>
-            <label for="password">Enter Password</label>
-            <input type="password" id="password" name="password" autocomplete="false" required>
+        {% if messages %}
+        <div class="messages-section">
+          {% for message in messages %}
+          <small class="{{message.tags}}">
+            <span>{{message}}</span>
+            <button>X</button>
+          </small>
+          {% endfor %}
         </div>
-        <div>
-            Don't have an account? <a href="{% url 'users:register' %}">Register here</a>
+        {% endif %}
+        <form method="post" autocomplete="off">
+          {% csrf_token %}
+          <div class="form-row">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              autocomplete="false"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="false"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <button class="login-btn" type="submit">Login</button>
+          </div>
+        </form>
+        <div class="register-cta-section">
+          <div>
+            Don't have an account?
+            <a href="{% url 'users:register' %}">Join Rednews</a>
+          </div>
+          <svg class="login__alt-cta__img login__alt-cta__img01" width="182" height="86" xmlns="http://www.w3.org/2000/svg">
+            <path d="M43.268 1.471c-11.206.54-22.788 3.669-31.596 10.734C-1.078 22.435-2.35 39.097 9.405 51.12c11.884 12.154 32.194 17.12 48.204 12.741 4.955-1.355 19.666-8.944 13.358-16.521-6.018-7.229-21.23-5.946-28.683-3.458-6.158 2.056-11.646 6.205-12.796 12.96-2.248 13.209 7.936 25.114 17.727 32.555 16.072 12.213 35.92 19.617 55.411 23.973 19.712 4.406 42.14 6.367 61.06-1.73 6.398-2.737 11.807-7.276 16.11-12.636.399-.497 1.542-2.033 1.164-1.52"></path>
+          </svg>
+          <svg class="login__alt-cta__img login__alt-cta__img02" width="53" height="51" xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <path d="M13.81 47.388c-2.05-.767-4.005-1.768-5.967-2.716a64.79 64.79 0 0 0-4.025-1.792c-.063-.025-1.036-.312-.998-.456.081-.313.512-.654.71-.877 1.072-1.197 2.106-2.416 3.004-3.744 1.273-1.882 2.492-4.036 2.763-6.3"></path>
+              <path d="M3 42.42c15.225-3.279 28.41-9.747 36.76-23.393C46.038 8.767 50.728-3.093 52.217-15"></path>
+            </g>
+          </svg>
         </div>
-        <div>
-            <button type="submit">Login</button>
-        </div>
-    </form>
-</body>
+      </div>
+    </div>
+  </body>
 </html>
