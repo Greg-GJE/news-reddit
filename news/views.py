@@ -33,11 +33,11 @@ def index(request):
         country_code = 'us'
 
 
-    news_api_client = NewsApiClient(api_key=settings.NEWSAPI_KEY)
+    # news_api_client = NewsApiClient(api_key=settings.NEWSAPI_KEY)
 
-    top_news = news_api_client.get_top_headlines(language='en', country=country_code.lower())
+    # top_news = news_api_client.get_top_headlines(language='en', country=country_code.lower())
 
-    featured_news = top_news['articles'][0]
-    
+    # featured_news = top_news['articles'][0]
 
-    return render(request, 'news/index.html', {'country_code': country_code, 'featured': featured_news})
+
+    return render(request, 'news/index.html')
