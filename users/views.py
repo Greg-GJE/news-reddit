@@ -47,13 +47,13 @@ def login_user(request):
             return redirect(reverse('users:login'))
         else:
             login(request, user)
-            return redirect(reverse('news:index'))
+            return redirect(request.GET.get('next', reverse('news:index')))
 
     elif request.method == constants.GET:
         if not request.user.is_authenticated:
             return render(request, 'users/login.html')
 
-        return redirect(reverse('news:index'))
+        return redirect(request.GET.get('next', reverse('news:index')))
     return None
 
 

@@ -1,12 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from newsapi import NewsApiClient
 import json
 import requests
 
+from bs4 import BeautifulSoup
+
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.template.defaultfilters import slugify
+
+from django.contrib.auth.decorators import login_required
 
 from .models import FeaturedNews, Timestamp
 
@@ -32,7 +36,7 @@ def add_to_database_from_api(news_api_client, category, country_code):
             language='en', country=country_code.lower())
     else:
         top_news_response = news_api_client.get_top_headlines(
-            language='en', category=category
+            language='en', category=category, country=country_code.lower()
         )
     # max news
     MAX_NEWS_EACH_CATEGORY = 6
@@ -43,21 +47,23 @@ def add_to_database_from_api(news_api_client, category, country_code):
         for top_news in top_news_response.get('articles'):
             if current_total >= MAX_NEWS_EACH_CATEGORY:
                 break
-            if top_news.get('title') is not None and top_news.get('description') is not None and top_news.get('content') is not None:
-                if not FeaturedNews.objects.filter(slug=slugify(top_news.get('title'))).exists():
+            if top_news.get('title') is not None and \
+                top_news.get('description') is not None and \
+                top_news.get('content') is not None:
+                if not FeaturedNews.objects.filter(slug=slugify(top_news.get('title'))):
                     current_news = FeaturedNews(title=top_news.get('title'),
-                                                author=top_news.get('author', 'anonymous'),
-                                                description=top_news.get(
-                                                    'description'),
-                                                content=top_news.get(
-                                                    'content'),
-                                                category=category,
-                                                url=top_news.get('url'),
-                                                image_url=top_news.get(
-                                                    'urlToImage'),
-                                                published_date=parse_datetime(
-                                                    top_news.get('publishedAt'))
-                                                )
+                                                    author=top_news.get('author', 'anonymous'),
+                                                    description=top_news.get(
+                                                        'description'),
+                                                    content=top_news.get(
+                                                        'content'),
+                                                    category=category,
+                                                    url=top_news.get('url'),
+                                                    image_url=top_news.get(
+                                                        'urlToImage'),
+                                                    published_date=parse_datetime(
+                                                        top_news.get('publishedAt'))
+                                                    )
                     current_news.save()
                     current_total += 1
                 else:
@@ -94,6 +100,9 @@ def populate_featured_news_database():
 
         news_api_client = NewsApiClient(api_key=settings.NEWSAPI_KEY)
 
+        # first of all delete all the records from the table
+        FeaturedNews.objects.all().delete()
+
         add_to_database_from_api(news_api_client, "headlines", country_code)
         add_to_database_from_api(news_api_client, "business", country_code)
         add_to_database_from_api(news_api_client, "technology", country_code)
@@ -107,10 +116,10 @@ def index(request):
 
 
 
-    featured_news = FeaturedNews.objects.filter(category="headlines").order_by("-published_date")
-    business_news = FeaturedNews.objects.filter(category="business").order_by("-published_date")
-    tech_news = FeaturedNews.objects.filter(category="technology").order_by("-published_date")
-    sports_news = FeaturedNews.objects.filter(category="sports").order_by("-published_date")
+    featured_news = FeaturedNews.objects.filter(category="headlines").order_by("-published_date")[:6]
+    business_news = FeaturedNews.objects.filter(category="business").order_by("-published_date")[:6]
+    tech_news = FeaturedNews.objects.filter(category="technology").order_by("-published_date")[:6]
+    sports_news = FeaturedNews.objects.filter(category="sports").order_by("-published_date")[:6]
 
     # if top_news_response is not None:
     #     featured_news_list = top_news_response['articles'][:6]
@@ -170,5 +179,37 @@ def index(request):
     return render(request, 'news/index.html', context=context)
 
 
+
+@login_required(login_url='/users/login')
 def featured_news_detail(request, slug):
-    return render(request, 'news/featured_news_detail.html')
+    news = get_object_or_404(FeaturedNews, slug=slug)
+
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'}
+
+    r = requests.get(news.url, headers=headers, timeout=5)
+    soup = BeautifulSoup(r.content, "html.parser")
+
+    # print(soup.prettify())
+
+    content = []
+    for paragraph in soup.find_all('p'):
+        paragraph_text = paragraph.get_text()
+        if len(paragraph_text) > 0:
+            content.append(f'<p>{paragraph.get_text()}</p>')
+
+
+    # use beautiful soup to extract the url
+
+    if len(content) == 0:
+        try:
+            text = news.content[:news.content.index('[+')]
+        except ValueError:
+            text = news.content
+    else:
+        text = ''.join(content)
+
+    context = {
+        'news': news,
+        'text': text
+    }
+    return render(request, 'news/featured_news_detail.html', context=context)

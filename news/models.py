@@ -12,6 +12,7 @@ User = get_user_model()
 # Create your models here.
 
 
+# This will behave as cache for FeaturedNews
 class FeaturedNews(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
@@ -24,9 +25,19 @@ class FeaturedNews(models.Model):
         max_length=400, null=True, default='/static/images/register_background.jpg')
     published_date = models.DateTimeField(default=now)
 
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['slug'])
+        ]
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
+        if self.author is None:
+            self.author = 'Anonymous'
+        if self.image_url is None:
+            self.image_url = '/static/images/register_background.jpg'
         super(FeaturedNews, self).save(*args, **kwargs)
 
     def __str__(self):

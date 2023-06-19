@@ -37,6 +37,7 @@
                 </form>
             </div>
             <div class="navbar_right__cta">
+                <a style="font-size: 0.9rem;" href="{% url 'news:index' %}">Home</a>
                 <button class="create_news_btn">Create News</button>
                 {% if request.user.is_authenticated %}
                 <div class="profile_img_container">
@@ -95,20 +96,22 @@
                                 <h1>{{news.title | safe}}</h1>
                             </div>
                             <div class="card-meta">
-                                29 May, 2023 | {{news.author}}
+                                {{news.published_date|date:"M d, Y"}} {{news.published_date|time:"H:i"}}  | <span class="news_author">{{news.author}}</span>
                             </div>
                             <div class="card-description">
                                 {{news.description | safe}}
                             </div>
-                            <hr class="hr">
-                            <div class="card-links">
-                                <button class="read_more">
-                                    <a class="read_more_cta" href="#">Read More</a>
-                                </button>
-                                <button class="goto_source">
-                                    <a class="goto_source_cta" target="_blank" href="{{news.url}}">
-                                    Go to Source</a>
-                                </button>
+                            <div class="card_footer">
+                                <hr class="hr">
+                                <div class="card-links">
+                                    <button class="read_more">
+                                        <a class="read_more_cta" href="{% url 'news:featured_news_detail' slug=news.slug %}">Read More</a>
+                                    </button>
+                                    <button class="goto_source">
+                                        <a class="goto_source_cta" target="_blank" href="{{news.url}}">
+                                        Go to Source</a>
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -131,16 +134,14 @@
                                 <h1>{{news.title | safe}}</h1>
                             </div>
                             <div class="card-meta">
-                                29 May, 2023 | {{news.author}}
-                            </div>
+                                {{news.published_date|date:"M d, Y"}} {{news.published_date|time:"H:i"}}  | <span class="news_author">{{news.author}}</span>                            </div>
                             <div class="card-description">
                                 {{news.description | safe}}
                             </div>
                             <hr class="hr">
                             <div class="card-links">
                                 <button class="read_more">
-                                    <a class="read_more_cta" href="#">Read More</a>
-                                </button>
+                                    <a class="read_more_cta" href="{% url 'news:featured_news_detail' slug=news.slug %}">Read More</a>                                </button>
                                 <button class="goto_source">
                                     <a class="goto_source_cta" target="_blank" href="{{news.url}}">
                                     Go to Source</a>
@@ -168,7 +169,7 @@
                                 <h1>{{news.title | safe}}</h1>
                             </div>
                             <div class="card-meta">
-                                29 May, 2023 | {{news.author}}
+                                {{news.published_date|date:"M d, Y"}} {{news.published_date|time:"H:i"}}  | <span class="news_author">{{news.author}}</span>
                             </div>
                             <div class="card-description">
                                 {{news.description | safe}}
@@ -176,8 +177,7 @@
                             <hr class="hr">
                             <div class="card-links">
                                 <button class="read_more">
-                                    <a class="read_more_cta" href="#">Read More</a>
-                                </button>
+                                    <a class="read_more_cta" href="{% url 'news:featured_news_detail' slug=news.slug %}">Read More</a>                                </button>
                                 <button class="goto_source">
                                     <a class="goto_source_cta" target="_blank" href="{{news.url}}">
                                     Go to Source</a>
@@ -204,7 +204,7 @@
                                 <h1>{{news.title | safe}}</h1>
                             </div>
                             <div class="card-meta">
-                                29 May, 2023 | {{news.author}}
+                                {{news.published_date|date:"M d, Y"}} {{news.published_date|time:"H:i"}}  | <span class="news_author">{{news.author}}</span>
                             </div>
                             <div class="card-description">
                                 {{news.description | safe}}
@@ -212,8 +212,7 @@
                             <hr class="hr">
                             <div class="card-links">
                                 <button class="read_more">
-                                    <a class="read_more_cta" href="#">Read More</a>
-                                </button>
+                                    <a class="read_more_cta" href="{% url 'news:featured_news_detail' slug=news.slug %}">Read More</a>                                </button>
                                 <button class="goto_source">
                                     <a class="goto_source_cta" target="_blank" href="{{news.url}}">
                                     Go to Source</a>
