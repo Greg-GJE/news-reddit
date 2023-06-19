@@ -84,7 +84,7 @@
         </div>
         <section class="search_results">
             <div class="section_header">
-                <h1>{{count}} results for {{term}}</h1>
+                <h1>{{count}} result{{ count|pluralize }} for {{term}}</h1>
             </div>
             <div class="section_content">
                 {% for news in search_results %}
