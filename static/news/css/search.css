@@ -282,15 +282,6 @@ a:hover {
 }
 
 /* end of the navbar section */
-
-/* start of the featured news section */
-
-
-.news_author {
-  font-weight: 600;
-  color: #4a1919;
-}
-
 .container {
   padding-top: 10rem;
   min-width: 50%;
@@ -300,98 +291,110 @@ a:hover {
   overflow: hidden;
 }
 
-.section_header {
-  font-size: 1.5rem;
-  margin: 1.2rem 0;
-}
-
-.business_headlines > .section_header,
-.tech_headlines > .section_header,
-.sports_headlines > .section_header
-{
-    padding-top: 2rem;
-}
-
-.section_content {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: minmax(100px, auto);
-  column-gap: 1.2rem;
-  row-gap: 2rem;
-}
-
-.card {
-  border: 1px solid #eee;
-  padding: 0.5rem 1rem 1.5rem 1rem;
-  border-radius: 10px;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  display: flex;
-  flex-direction: column;
-}
-
-
-.card-img {
-  display: block;
-  margin-bottom: 1rem;
-}
-
-.card-img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-.card-img img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 8px;
-  aspect-ratio: 16 / 9;
-}
-
-.card-body {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.card-description {
-  flex-grow: 1;
-}
-
-.card-meta {
-  padding: 1rem 0;
-  font-size: 0.9rem;
-}
-
-.hr {
-    margin: 1.2rem;
-    border: 1px solid #eee;
-
-}
-
-.read_more {
-    background-color: #000;
-    border: none;
-    padding: 0.5rem;
-    margin-right: 0.7rem;
+.news_author {
     font-weight: 600;
-    border-radius: 3px;
-}
+    color: #4a1919;
+  }
 
-.read_more a {
-    color: #fff;
-}
+  .container {
+    padding-top: 10rem;
+    min-width: 50%;
+    max-width: 70%;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
 
-.goto_source {
-    background-color: #fff;
-    border: solid 1px #ddd;
-    padding: 0.5rem;
-    border-radius: 3px;
-    font-weight: 500;
-}
+  .section_header {
+    font-size: 1.5rem;
+    margin: 1.2rem 0;
+  }
 
-.goto_source:hover {
-    border: solid 1px #999;
-}
+  .business_headlines > .section_header,
+  .tech_headlines > .section_header,
+  .sports_headlines > .section_header
+  {
+      padding-top: 2rem;
+  }
+
+  .section_content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+    column-gap: 1.2rem;
+    row-gap: 2rem;
+  }
+
+  .card {
+    border: 1px solid #eee;
+    padding: 0.5rem 1rem 1.5rem 1rem;
+    border-radius: 10px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    display: flex;
+    flex-direction: column;
+  }
 
 
+  .card-img {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .card-img {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .card-img img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    aspect-ratio: 16 / 9;
+  }
+
+  .card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-description {
+    flex-grow: 1;
+  }
+
+  .card-meta {
+    padding: 1rem 0;
+    font-size: 0.9rem;
+  }
+
+  .hr {
+      margin: 1.2rem;
+      border: 1px solid #eee;
+
+  }
+
+  .read_more {
+      background-color: #000;
+      border: none;
+      padding: 0.5rem;
+      margin-right: 0.7rem;
+      font-weight: 600;
+      border-radius: 3px;
+  }
+
+  .read_more a {
+      color: #fff;
+  }
+
+  .goto_source {
+      background-color: #fff;
+      border: solid 1px #ddd;
+      padding: 0.5rem;
+      border-radius: 3px;
+      font-weight: 500;
+  }
+
+  .goto_source:hover {
+      border: solid 1px #999;
+  }

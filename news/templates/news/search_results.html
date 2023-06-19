@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Featured</title>
-    <link rel="stylesheet" href="{% static 'news/css/featured_detail.css' %}">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{% static 'news/css/search.css' %}">
 </head>
 <body>
     <nav class="navbar">
@@ -29,7 +29,7 @@
                             </path>
                         </svg>
 
-                        <input class="search" type="search" name="search" placeholder="search featured news">
+                        <input class="search" type="search" name="search" value="{{term}}" placeholder="search featured news">
                     </div>
                 </form>
             </div>
@@ -77,26 +77,47 @@
         </ul>
     </nav>
     <main class="container">
-        <section class="breadcrumb">
+        <div class="breadcrumb">
             <small>
-                <a href="{% url 'news:index' %}">home</a> <span> > </span> <a href="{% url 'news:featured_news_detail' slug=news.slug %}" class="active_breadcrumb">{{news.slug}}</a>
+                <a href="{% url 'news:index' %}">home</a> <span> > </span> <span>{{term}}</span>
             </small>
-        </section>
-        <section class="meta-section">
+        </div>
+        <section class="search_results">
+            <div class="section_header">
+                <h1>{{count}} results for {{term}}</h1>
+            </div>
+            <div class="section_content">
+                {% for news in search_results %}
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="{{news.image_url}}" alt="{{news.title}}" loading="lazy">
+                        </div>
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h1>{{news.title | safe}}</h1>
+                            </div>
+                            <div class="card-meta">
+                                {{news.published_date|date:"M d, Y"}} {{news.published_date|time:"H:i"}}  | <span class="news_author">{{news.author}}</span>
+                            </div>
+                            <div class="card-description">
+                                {{news.description | safe}}
+                            </div>
+                            <div class="card_footer">
+                                <hr class="hr">
+                                <div class="card-links">
+                                    <button class="read_more">
+                                        <a class="read_more_cta" target="_blank" href="{{news.url}}">
+                                        Go to Source</a>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
-        </section>
-        <section class="heading">
-            <h1>{{news.title}}</h1>
-        </section>
-        <section class="image">
-            <img src="{{news.image_url}}" alt="{{news.title}}">
-        </section>
-        <section class="meta">
-            By {{news.author}} on {{news.published_date|date:"M d, Y"}} {{news.published_date|time:"H:i"}}
-        </section>
-        <section id="content">
-            {{text | safe}}
+                    </div>
+                {% endfor %}
+            </div>
         </section>
     </main>
+
 </body>
 </html>

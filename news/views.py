@@ -1,4 +1,5 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.conf import settings
 from newsapi import NewsApiClient
 import json
@@ -48,22 +49,23 @@ def add_to_database_from_api(news_api_client, category, country_code):
             if current_total >= MAX_NEWS_EACH_CATEGORY:
                 break
             if top_news.get('title') is not None and \
-                top_news.get('description') is not None and \
-                top_news.get('content') is not None:
+                    top_news.get('description') is not None and \
+                    top_news.get('content') is not None:
                 if not FeaturedNews.objects.filter(slug=slugify(top_news.get('title'))):
                     current_news = FeaturedNews(title=top_news.get('title'),
-                                                    author=top_news.get('author', 'anonymous'),
-                                                    description=top_news.get(
-                                                        'description'),
-                                                    content=top_news.get(
-                                                        'content'),
-                                                    category=category,
-                                                    url=top_news.get('url'),
-                                                    image_url=top_news.get(
-                                                        'urlToImage'),
-                                                    published_date=parse_datetime(
-                                                        top_news.get('publishedAt'))
-                                                    )
+                                                author=top_news.get(
+                                                    'author', 'anonymous'),
+                                                description=top_news.get(
+                        'description'),
+                        content=top_news.get(
+                        'content'),
+                        category=category,
+                        url=top_news.get('url'),
+                        image_url=top_news.get(
+                        'urlToImage'),
+                        published_date=parse_datetime(
+                        top_news.get('publishedAt'))
+                    )
                     current_news.save()
                     current_total += 1
                 else:
@@ -82,14 +84,19 @@ def populate_featured_news_database():
         will_populate_db = True
 
     present_timestamp = timezone.now()
-    stored_timestamp = Timestamp.objects.all()[0].creationDate
+    current_timestamp_object = Timestamp.objects.all()[0]
+    stored_timestamp = current_timestamp_object.creationDate
 
     elapsed_time_in_hours = (
         present_timestamp - stored_timestamp).seconds / 3600
 
-    if elapsed_time_in_hours >= 1:
+    if elapsed_time_in_hours >= 5:
         # more than an hour has passed so we need to add updated news to the collection
         will_populate_db = True
+
+        # update the timestamp
+        current_timestamp_object.creationDate = present_timestamp
+        current_timestamp_object.save()
 
     if will_populate_db:
         # populate the db
@@ -111,63 +118,16 @@ def populate_featured_news_database():
 
 def index(request):
 
-
     populate_featured_news_database()
 
-
-
-    featured_news = FeaturedNews.objects.filter(category="headlines").order_by("-published_date")[:6]
-    business_news = FeaturedNews.objects.filter(category="business").order_by("-published_date")[:6]
-    tech_news = FeaturedNews.objects.filter(category="technology").order_by("-published_date")[:6]
-    sports_news = FeaturedNews.objects.filter(category="sports").order_by("-published_date")[:6]
-
-    # if top_news_response is not None:
-    #     featured_news_list = top_news_response['articles'][:6]
-    #     for news in featured_news_list:
-    #         featured_news.append({
-    #             'author': 'anonymous' if news['author'] is None else news['author'],
-    #             'title': news['title'],
-    #             'description': news['description'],
-    #             'url': news['url'],
-    #             'imageUrl': news['urlToImage'],
-    #             'publishedAt': news['publishedAt']
-    #         })
-
-    # if top_business_news_response is not None:
-    #     business_news_list = top_business_news_response['articles'][1:7]
-    #     for news in business_news_list:
-    #         business_news.append({
-    #             'author': 'anonymous' if news['author'] is None else news['author'],
-    #             'title': news['title'],
-    #             'description': news['description'],
-    #             'url': news['url'],
-    #             'imageUrl': news['urlToImage'],
-    #             'publishedAt': news['publishedAt']
-    #         })
-
-    # if top_tech_news_response is not None:
-    #     tech_news_list = top_tech_news_response['articles'][:6]
-    #     for news in tech_news_list:
-    #         tech_news.append({
-    #             'author': 'anonymous' if news['author'] is None else news['author'],
-    #             'title': news['title'],
-    #             'description': news['description'],
-    #             'url': news['url'],
-    #             'imageUrl': news['urlToImage'],
-    #             'publishedAt': news['publishedAt']
-    #         })
-
-    # if top_sports_news_response is not None:
-    #     sports_news_list = top_sports_news_response['articles'][4:10]
-    #     for news in sports_news_list:
-    #         sports_news.append({
-    #             'author': 'anonymous' if news['author'] is None else news['author'],
-    #             'title': news['title'],
-    #             'description': news['description'],
-    #             'url': news['url'],
-    #             'imageUrl': news['urlToImage'],
-    #             'publishedAt': news['publishedAt']
-    #         })
+    featured_news = FeaturedNews.objects.filter(
+        category="headlines").order_by("-published_date")[:6]
+    business_news = FeaturedNews.objects.filter(
+        category="business").order_by("-published_date")[:6]
+    tech_news = FeaturedNews.objects.filter(
+        category="technology").order_by("-published_date")[:6]
+    sports_news = FeaturedNews.objects.filter(
+        category="sports").order_by("-published_date")[:6]
 
     context = {
         'featured': featured_news,
@@ -179,12 +139,12 @@ def index(request):
     return render(request, 'news/index.html', context=context)
 
 
-
 @login_required(login_url='/users/login')
 def featured_news_detail(request, slug):
     news = get_object_or_404(FeaturedNews, slug=slug)
 
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'}
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'}
 
     r = requests.get(news.url, headers=headers, timeout=5)
     soup = BeautifulSoup(r.content, "html.parser")
@@ -196,7 +156,6 @@ def featured_news_detail(request, slug):
         paragraph_text = paragraph.get_text()
         if len(paragraph_text) > 0:
             content.append(f'<p>{paragraph.get_text()}</p>')
-
 
     # use beautiful soup to extract the url
 
@@ -213,3 +172,36 @@ def featured_news_detail(request, slug):
         'text': text
     }
     return render(request, 'news/featured_news_detail.html', context=context)
+
+
+def search(request):
+    # here will be calling the search api
+    search_term = request.GET.get('search')
+    if search_term is None or search_term.strip() == '':
+        return redirect(reverse('news:index'))
+
+    # call the news api and fetch the data
+
+    search_results = []
+
+    news_api_client = NewsApiClient(api_key=settings.NEWSAPI_KEY)
+
+    articles = news_api_client.get_everything(q=search_term, sort_by='relevancy', page=1, language='en')
+
+    if articles is not None and articles.get('articles') is not None:
+        print(len(articles.get('articles')))
+        for article in articles.get('articles')[:50]:
+            if article.get('title') is not None and article.get('description') is not None and article.get('urlToImage') is not None:
+                search_results.append({
+                    'title': article.get('title'),
+                    'description': article.get('description'),
+                    'author': article.get('author', 'anonymous'),
+                    'image_url': article.get('urlToImage'),
+                    'url': article.get('url'),
+                    'published_date': article.get('publishedAt')
+                })
+
+    print(search_results)
+
+    context = {'term': search_term, 'search_results': search_results,  'count': len(search_results)}
+    return render(request, 'news/search_results.html', context=context)

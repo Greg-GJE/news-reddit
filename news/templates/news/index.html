@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="navbar_right">
-                <form method="get" action="#">
+                <form method="get" action="{% url 'news:search' %}">
                     {% csrf_token %}
                     <div class="search_container">
 
@@ -75,7 +75,7 @@
             </div>
         </div>
         <ul class="categories_section">
-            <li class="active"><a href="#">Featured</a></li>
+            <li class="active"><a href="{% url 'news:index' %}">Featured</a></li>
             <li><a href="#">Community</a></li>
         </ul>
     </nav>
