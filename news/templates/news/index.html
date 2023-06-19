@@ -88,17 +88,17 @@
                 {% for news in featured %}
                     <div class="card">
                         <div class="card-img">
-                            <img src="{{news.imageUrl}}" alt="{{news.title}}" loading="lazy">
+                            <img src="{{news.image_url}}" alt="{{news.title}}" loading="lazy">
                         </div>
                         <div class="card-body">
                             <div class="card-title">
-                                <h1>{{news.title}}</h1>
+                                <h1>{{news.title | safe}}</h1>
                             </div>
                             <div class="card-meta">
                                 29 May, 2023 | {{news.author}}
                             </div>
                             <div class="card-description">
-                                {{news.description}}
+                                {{news.description | safe}}
                             </div>
                             <hr class="hr">
                             <div class="card-links">
@@ -124,17 +124,17 @@
                 {% for news in business %}
                     <div class="card">
                         <div class="card-img">
-                            <img src="{{news.imageUrl}}" alt="{{news.title}}" loading="lazy">
+                            <img src="{{news.image_url}}" alt="{{news.title}}" loading="lazy">
                         </div>
                         <div class="card-body">
                             <div class="card-title">
-                                <h1>{{news.title}}</h1>
+                                <h1>{{news.title | safe}}</h1>
                             </div>
                             <div class="card-meta">
                                 29 May, 2023 | {{news.author}}
                             </div>
                             <div class="card-description">
-                                {{news.description}}
+                                {{news.description | safe}}
                             </div>
                             <hr class="hr">
                             <div class="card-links">
@@ -153,7 +153,7 @@
 
             </div>
         </section>
-        <section class="technology_headlines">
+        <section class="tech_headlines">
             <div class="section_header">
                 <h1>Latest Technology News</h1>
             </div>
@@ -161,17 +161,17 @@
                 {% for news in technology %}
                     <div class="card">
                         <div class="card-img">
-                            <img src="{{news.imageUrl}}" alt="{{news.title}}" loading="lazy">
+                            <img src="{{news.image_url}}" alt="{{news.title}}" loading="lazy">
                         </div>
                         <div class="card-body">
                             <div class="card-title">
-                                <h1>{{news.title}}</h1>
+                                <h1>{{news.title | safe}}</h1>
                             </div>
                             <div class="card-meta">
                                 29 May, 2023 | {{news.author}}
                             </div>
                             <div class="card-description">
-                                {{news.description}}
+                                {{news.description | safe}}
                             </div>
                             <hr class="hr">
                             <div class="card-links">
@@ -197,17 +197,17 @@
                 {% for news in sports %}
                     <div class="card">
                         <div class="card-img">
-                            <img src="{{news.imageUrl}}" alt="{{news.title}}" loading="lazy">
+                            <img src="{{news.image_url}}" alt="{{news.title}}" loading="lazy">
                         </div>
                         <div class="card-body">
                             <div class="card-title">
-                                <h1>{{news.title}}</h1>
+                                <h1>{{news.title | safe}}</h1>
                             </div>
                             <div class="card-meta">
                                 29 May, 2023 | {{news.author}}
                             </div>
                             <div class="card-description">
-                                {{news.description}}
+                                {{news.description | safe}}
                             </div>
                             <hr class="hr">
                             <div class="card-links">
