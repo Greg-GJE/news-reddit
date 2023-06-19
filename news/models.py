@@ -1,4 +1,6 @@
 # pylint: disable=no-member
+# pylint: disable=missing-module-docstring
+
 
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -58,7 +60,6 @@ class Timestamp(models.Model):
         return f'{self.creationDate}'
 
 
-
 class CommunityNews(models.Model):
 
     CATEGORIES = (
@@ -71,7 +72,7 @@ class CommunityNews(models.Model):
     )
 
     title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='news')
     banner = models.ImageField(
@@ -80,16 +81,14 @@ class CommunityNews(models.Model):
     content = models.TextField()
     published_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    category = models.CharField(max_length=20, choices=CATEGORIES, default="lifestyle")
+    category = models.CharField(
+        max_length=20, choices=CATEGORIES, default="lifestyle")
 
     def get_total_upvotes(self):
         return self.upvotes.users.count()
 
     def get_total_downvotes(self):
         return self.downvotes.users.count()
-
-    def get_votes(self):
-        return self.get_total_upvotes() - self.get_total_downvotes()
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -104,6 +103,9 @@ class CommunityNews(models.Model):
             banner_image.thumbnail(output_size)
 
             banner_image.save(self.banner.path)
+
+    def __str__(self) -> str:
+        return f'{self.title}'
 
 
 class Comment(models.Model):

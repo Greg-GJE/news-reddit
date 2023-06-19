@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community News</title>
+    <link rel="stylesheet" href="{% static 'news/css/community.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar_container">
+            <div class="navbar_left">
+                <div>
+                    <a href="{% url 'news:index' %}"><img class="navbar_logo_img"
+                            src="{% static 'images/logo_header_black.svg' %}" alt=""></a>
+                </div>
+            </div>
+            <div class="navbar_right">
+                <form method="get" action="{% url 'news:search' %}">
+                    {% csrf_token %}
+                    <div class="search_container">
+
+                        <svg width="32" height="32" class="DFW_E nT46U VETef" viewBox="0 0 24 24" version="1.1"
+                            aria-hidden="false">
+                            <desc lang="en-US">A magnifying glass</desc>
+                            <path
+                                d="M16.5 15c.9-1.2 1.5-2.8 1.5-4.5C18 6.4 14.6 3 10.5 3S3 6.4 3 10.5 6.4 18 10.5 18c1.7 0 3.2-.5 4.5-1.5l4.6 4.5 1.4-1.5-4.5-4.5zm-6 1c-3 0-5.5-2.5-5.5-5.5S7.5 5 10.5 5 16 7.5 16 10.5 13.5 16 10.5 16z">
+                            </path>
+                        </svg>
+
+                        <input class="search" type="search" name="search" placeholder="search community news">
+                    </div>
+                </form>
+            </div>
+            <div class="navbar_right__cta">
+                <a style="font-size: 0.9rem;" href="{% url 'news:index' %}">Home</a>
+                <button class="create_news_btn">Create News</button>
+                {% if request.user.is_authenticated %}
+                <div class="profile_img_container">
+                    <button id="profile_btn" role="button" tabindex="0" aria-haspopup="true" aria-expanded="true"
+                        type="button" class="profile_img_btn">
+                        <div class="profile_img_btn__cta1">
+                            <div class="profile_img_btn__cta2">
+                                <img class="profile_img" loading="lazy" role="presentation"
+                                    src="{{request.user.profile.image.url}}" alt="user profile image">
+                            </div>
+                        </div>
+                    </button>
+                </div>
+                <div id="logout_menu" role="menu" tabindex="-1" style="display: none;">
+                    <div class="menu-popup">
+                        <div class="menu-popup__popover">
+                            <div class="top_arrow">
+                                <div class="top_arrow__cta1"></div>
+                                <div classs="top_arrow__cta2"></div>
+                            </div>
+                            <div class="popup_content">
+                                <ul class="menu_content">
+                                    <li class="menu_item">
+                                        <a role="link" tabindex="-1" aria-disabled="false" class="logout__cta"
+                                            href="{% url 'users:logout' %}">Logout @{{request.user.username}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <button class="login_btn"><a href="{% url 'users:login' %}">Log in</a></button>
+                {% endif %}
+            </div>
+        </div>
+        <ul class="categories_section">
+            <li><a href="{% url 'news:index' %}">Featured</a></li>
+            <li class="active"><a href="{% url 'news:community' %}">Community</a></li>
+        </ul>
+    </nav>
+
+    {% if liked_news %}
+    <div class="top_post_section">
+        <section class="container header">
+            <h1 class="top_post__heading">News of the day</h1>
+            <div class="top_post__body">
+                <div class="top_post__img">
+                    <img src="{{liked_news.banner.url}}" alt="">
+                </div>
+                <div class="top_post__content">
+                    <div class="top_post__title">
+                        <h1>{{liked_news.title}}</h1>
+                    </div>
+                    <div class="top_post__meta">
+                        <small>By {{liked_news.author.username}} on {{liked_news.published_at|date:"M d, Y"}} at {{liked_news.published_at|time:"H:i"}}</small>
+                    </div>
+                    <div class="top_post__category">
+                        {{liked_news.category}}
+                    </div>
+                    <div class="top_post__description">
+                        {{liked_news.description}}
+                    </div>
+                    <div class="top_post__cta">
+                        <button class="read_more"><a href="#">Read More</a></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    {% endif %}
+
+    <main class="{% if liked_news %} container_main {% else %} container {% endif %}">
+        <section class="search_results">
+            <div class="section_header_section">
+                <div class="section_header">
+                    <h1>{{title}}</h1>
+                </div>
+                <div class="filters">
+                    <div>
+                        <!-- <div class="dropdown">
+                            <button class="dropdown-btn">
+                              <span>Framework</span>
+                              <span class="arrow"></span>
+                            </button>
+                            <ul class="dropdown-content">
+                              <li><a href="#">React</a></li>
+                              <li><a href="#">Angular</a></li>
+                              <li><a href="#">Vue</a></li>
+                              <li><a href="#">Svelte</a></li>
+                            </ul>
+                          </div> -->
+                        <label for="categories">Filter By: </label>
+                        <select name="categories" id="categories" onchange="filterByCategory(this)">
+                            {% for category in categories  %}
+                                {% if category == selected_choice %}
+                                    <option value="{{category}}" selected>{{category|title}}</option>
+                                {% else %}
+                                    <option value="{{category}}">{{category|title}}</option>
+                                {% endif %}
+                            {% endfor %}
+                         </select>
+                    </div>
+                </div>
+            </div>
+            {% if community_news %}
+            <div class="section_content">
+                    {% for news in community_news %}
+                        <div class="card">
+                            <div class="card-img">
+                                <img src="{{news.banner.url}}" alt="{{news.title}}" loading="lazy">
+                            </div>
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <h1>{{news.title | safe}}</h1>
+                                </div>
+                                <div class="card-meta">
+                                    {{news.published_at|date:"M d, Y"}} {{news.published_at|time:"H:i"}}  | <span class="news_author">{{news.author.username}}</span>
+                                </div>
+                                <div class="card-description">
+                                    {{news.description | safe}}
+                                </div>
+                                <div class="card_footer">
+                                    <hr class="hr">
+                                    <div class="card-links">
+                                        <button class="read_more">
+                                            <a class="read_more_cta" href="#">Read More</a>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+
+
+            </div>
+            {% else %}
+            <div class="not_found_container">
+                <div class="image">
+                    <img src="{% static 'images/not_found.svg' %}" alt="">
+                </div>
+                <div class="not_found__content">
+                    Sorry! No news could be found!
+                </div>
+            </div>
+        {% endif %}
+        </section>
+    </main>
+
+    <script src="{% static 'news/js/navbar.js'%}" defer></script>
+    <script>
+        function filterByCategory(item) {
+            let url = window.location.href;
+            if (item.value === 'all') {
+                window.location.href = `/news/community`;
+            } else {
+                window.location.href = `/news/community?filter=${item.value}`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,3 +1,6 @@
+# pylint: disable=missing-module-docstring
+# pylint: disable=no-member
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.conf import settings
@@ -13,7 +16,7 @@ from django.template.defaultfilters import slugify
 
 from django.contrib.auth.decorators import login_required
 
-from .models import FeaturedNews, Timestamp
+from .models import FeaturedNews, Timestamp, CommunityNews
 
 
 def fetch_country_code():
@@ -90,7 +93,7 @@ def populate_featured_news_database():
     elapsed_time_in_hours = (
         present_timestamp - stored_timestamp).seconds / 3600
 
-    if elapsed_time_in_hours >= 5:
+    if elapsed_time_in_hours >= 2:
         # more than an hour has passed so we need to add updated news to the collection
         will_populate_db = True
 
@@ -186,7 +189,8 @@ def search(request):
 
     news_api_client = NewsApiClient(api_key=settings.NEWSAPI_KEY)
 
-    articles = news_api_client.get_everything(q=search_term, sort_by='relevancy', page=1, language='en')
+    articles = news_api_client.get_everything(
+        q=search_term, sort_by='relevancy', page=1, language='en')
 
     if articles is not None and articles.get('articles') is not None:
         print(len(articles.get('articles')))
@@ -203,5 +207,41 @@ def search(request):
 
     print(search_results)
 
-    context = {'term': search_term, 'search_results': search_results,  'count': len(search_results)}
+    context = {'term': search_term, 'search_results': search_results,
+               'count': len(search_results)}
     return render(request, 'news/search_results.html', context=context)
+
+
+def community_news(request):
+
+    if request.GET.get('filter') is not None:
+        selected_choice = request.GET.get('filter')
+        news = CommunityNews.objects.filter(category=selected_choice).order_by('-published_at')[:50]
+        title = f'Top {selected_choice.capitalize()} News'
+    else:
+        selected_choice = 'all'
+        news = CommunityNews.objects.all().order_by('-published_at')[:50]
+        title = 'Latest News'
+
+    categories = ['all', 'technology', 'lifestyle',
+                  'entertainment', 'sports', 'business', 'other']
+
+    # trying to get the featured post
+    # featured post is basically the post which is the post that has been for the current day
+
+    context = {}
+
+    try:
+        latest_news = CommunityNews.objects.filter(published_at__gte = timezone.now().replace(hour=0, minute=0, second=0)).order_by('-published_at')
+        most_liked_news = sorted(latest_news, key=lambda news : news.get_total_upvotes(), reverse=True)[0]
+        context['liked_news'] = most_liked_news
+    except CommunityNews.upvotes.RelatedObjectDoesNotExist:
+        pass
+
+    context['categories'] = categories
+    context['selected_choice'] = selected_choice
+    context['community_news'] = news
+    context['title'] = title
+
+
+    return render(request, 'news/community_news.html', context=context)
