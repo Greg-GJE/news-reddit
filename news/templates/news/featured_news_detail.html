@@ -35,7 +35,7 @@
             </div>
             <div class="navbar_right__cta">
                 <a style="font-size: 0.9rem;" href="{% url 'news:index' %}">Home</a>
-                <button class="create_news_btn">Create News</button>
+                <a class="create_news_btn" href="{% url 'news:create' %}">Create News</a>
                 {% if request.user.is_authenticated %}
                 <div class="profile_img_container">
                     <button id="profile_btn" role="button" tabindex="0" aria-haspopup="true" aria-expanded="true"

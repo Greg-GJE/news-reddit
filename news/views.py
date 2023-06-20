@@ -16,7 +16,8 @@ from django.template.defaultfilters import slugify
 
 from django.contrib.auth.decorators import login_required
 
-from .models import FeaturedNews, Timestamp, CommunityNews
+from .models import FeaturedNews, Timestamp, CommunityNews, Comment
+from .forms import CommunityNewsCreateForm
 
 
 def fetch_country_code():
@@ -195,14 +196,14 @@ def search(request):
     if articles is not None and articles.get('articles') is not None:
         print(len(articles.get('articles')))
         for article in articles.get('articles')[:50]:
-            if article.get('title') is not None and article.get('description') is not None and article.get('urlToImage') is not None:
+            if article.get('title') is not None and article.get('description') is not None and article.get('urlToImage') is not None and article.get('publishedAt') is not None:
                 search_results.append({
                     'title': article.get('title'),
                     'description': article.get('description'),
                     'author': article.get('author', 'anonymous'),
                     'image_url': article.get('urlToImage'),
                     'url': article.get('url'),
-                    'published_date': article.get('publishedAt')
+                    'published_date': parse_datetime(article.get('publishedAt'))
                 })
 
     print(search_results)
@@ -216,7 +217,8 @@ def community_news(request):
 
     if request.GET.get('filter') is not None:
         selected_choice = request.GET.get('filter')
-        news = CommunityNews.objects.filter(category=selected_choice).order_by('-published_at')[:50]
+        news = CommunityNews.objects.filter(
+            category=selected_choice).order_by('-published_at')[:50]
         title = f'Top {selected_choice.capitalize()} News'
     else:
         selected_choice = 'all'
@@ -232,9 +234,13 @@ def community_news(request):
     context = {}
 
     try:
-        latest_news = CommunityNews.objects.filter(published_at__gte = timezone.now().replace(hour=0, minute=0, second=0)).order_by('-published_at')
-        most_liked_news = sorted(latest_news, key=lambda news : news.get_total_upvotes(), reverse=True)[0]
-        context['liked_news'] = most_liked_news
+        latest_news = CommunityNews.objects.filter(published_at__gte=timezone.now(
+        ).replace(hour=0, minute=0, second=0)).order_by('-published_at')
+        most_liked_news_list = sorted(
+            latest_news, key=lambda news: news.get_total_upvotes(), reverse=True)
+        if len(most_liked_news_list) > 0:
+            most_liked_news = most_liked_news_list[0]
+            context['liked_news'] = most_liked_news
     except CommunityNews.upvotes.RelatedObjectDoesNotExist:
         pass
 
@@ -243,5 +249,59 @@ def community_news(request):
     context['community_news'] = news
     context['title'] = title
 
-
     return render(request, 'news/community_news.html', context=context)
+
+
+def community_detail(request, slug):
+    community_news_detail = get_object_or_404(CommunityNews, slug=slug)
+    comments = community_news_detail.comments.order_by('-published_at')
+
+    if request.GET.get('show') is not None and request.GET.get('show') == 'comment':
+        show_comment = True
+    else:
+        show_comment = False
+
+    context = {
+        'news': community_news_detail,
+        'comments': comments,
+        'show': show_comment
+    }
+
+    return render(request, 'news/community_news_detail.html', context=context)
+
+
+@login_required(login_url='/users/login')
+def add_comment(request):
+    if request.method == 'POST':
+        # extract the necessary details first
+        current_user = request.user
+        news_slug = request.POST.get('post_slug')
+
+        description = request.POST.get('comment')
+
+        if CommunityNews.objects.filter(slug=news_slug).exists() and description is not None and description != '':
+            current_news = CommunityNews.objects.get(slug=news_slug)
+
+            new_comment = Comment(author=current_user,
+                                  news=current_news, description=description)
+            new_comment.save()
+
+            return redirect(f'/news/community/{news_slug}?show=comment')
+
+    return redirect(reverse('news:community'))
+
+
+@login_required(login_url='/users/login')
+def create_community_news(request):
+    if request.method == 'GET':
+        form = CommunityNewsCreateForm()
+    elif request.method == 'POST':
+        form = CommunityNewsCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            recent_community_news = form.save(commit=False)
+            recent_community_news.author = request.user
+            recent_community_news.save()
+
+            return redirect(reverse('news:community'))
+        
+    return render(request, 'news/news_create.html', context={'form': form})

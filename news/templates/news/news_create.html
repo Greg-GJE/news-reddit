@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create News</title>
+    <link rel="stylesheet" href="{% static 'news/css/news_create.css' %}">
+</head>
+
+<body>
+    <div class="background">
+        <div class="bg_svg1">
+            <img src="{% static 'images/bg1.svg' %}" alt="">
+        </div>
+    </div>
+    <main class="container">
+        <section class="breadcrumb">
+            <small>
+                <a href="{% url 'news:community' %}">home</a> <span> > </span> <a href="#" class="active_breadcrumb">Create</a>
+            </small>
+        </section>
+        <div class="heading">
+            <h1>Create a community news!</h1>
+        </div>
+        <div class="form_messages">
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <form class="post_create_form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_div}}
+            <button type="submit" class="read_more">Create News</button>
+        </form>
+    </main>
+
+
+    <script src="{% static 'news/js/navbar.js' %}" defer></script>
+</body>
+
+</html>

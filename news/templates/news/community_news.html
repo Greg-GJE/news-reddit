@@ -35,7 +35,7 @@
             </div>
             <div class="navbar_right__cta">
                 <a style="font-size: 0.9rem;" href="{% url 'news:index' %}">Home</a>
-                <button class="create_news_btn">Create News</button>
+                <a class="create_news_btn" href="{% url 'news:create' %}">Create News</a>
                 {% if request.user.is_authenticated %}
                 <div class="profile_img_container">
                     <button id="profile_btn" role="button" tabindex="0" aria-haspopup="true" aria-expanded="true"
@@ -99,7 +99,7 @@
                         {{liked_news.description}}
                     </div>
                     <div class="top_post__cta">
-                        <button class="read_more"><a href="#">Read More</a></button>
+                        <button class="read_more"><a href="{% url 'news:community_detail' slug=liked_news.slug %}">Read More</a></button>
                     </div>
                 </div>
             </div>
@@ -161,7 +161,7 @@
                                     <hr class="hr">
                                     <div class="card-links">
                                         <button class="read_more">
-                                            <a class="read_more_cta" href="#">Read More</a>
+                                            <a class="read_more_cta" href="{% url 'news:community_detail' slug=news.slug %}">Read More</a>
                                         </button>
                                     </div>
                                 </div>

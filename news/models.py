@@ -91,8 +91,7 @@ class CommunityNews(models.Model):
         return self.downvotes.users.count()
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
+        self.slug = slugify(self.title)
 
         super(CommunityNews, self).save(*args, **kwargs)
 
@@ -114,6 +113,7 @@ class Comment(models.Model):
         User, on_delete=models.CASCADE, related_name='comments')
     news = models.ForeignKey(
         CommunityNews, on_delete=models.CASCADE, related_name='comments')
+    published_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f'{self.description}'
