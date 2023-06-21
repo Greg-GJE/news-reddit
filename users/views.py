@@ -5,13 +5,17 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
+
+from news.models import CommunityNews
+
 from . import constants
 
 # Create your views here.
 
 
-def index(_):
+def index(request):
     return redirect(reverse('users:user_profile'))
+
 
 
 @login_required(login_url='/users/login')
@@ -19,13 +23,18 @@ def fetch_user_details(request, username=None):
 
     user_model = get_user_model()
 
+    current = False
+
     if username is None or username == request.user.username:
         # fetch the current profile
         user = request.user
+        current = True
     else:
         user = get_object_or_404(user_model, username=username)
 
-    context = {'profile': user.profile, 'current': False}
+    news = user.news.order_by("-published_at")
+
+    context = {'current': current, 'user': user, 'profile_news': news}
     return render(request, 'users/profile.html', context=context)
 
 
@@ -104,6 +113,20 @@ def register_user(request):
         return redirect(reverse('news:index'))
     return None
 
+@login_required(login_url="/users/login")
+def delete_news(request):
+    if request.method == 'POST':
+        slug = request.POST.get('news_slug')
+        if slug is not None and slug != '':
+            news_to_delete = CommunityNews.objects.get(slug=slug)
+            print(news_to_delete)
+
+            # deleting the news
+            news_to_delete.delete()
+
+            return redirect(reverse('users:user_profile'))
+
+    return redirect(reverse('news:community'))
 
 def logout_user(request):
     logout(request)

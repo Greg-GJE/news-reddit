@@ -84,7 +84,7 @@
         </div>
         <section class="search_results">
             <div class="section_header">
-                <h1>{{count}} result{{ count|pluralize }} for {{term}}</h1>
+                <h1>{{count}} result{{ count|pluralize }} for '{{term}}'</h1>
             </div>
             <div class="section_content">
                 {% for news in search_results %}
@@ -97,7 +97,7 @@
                                 <h1>{{news.title | safe}}</h1>
                             </div>
                             <div class="card-meta">
-                                {{news.published_at|date:"M d, Y"}} {{news.published_at|time:"H:i"}}  | <span class="news_author">{{news.author}}</span>
+                                {{news.published_at|date:"M d, Y"}} {{news.published_at|time:"H:i"}}  | <a href="{% url 'users:profile' username=news.author.username %}" class="news_author">{{news.author}}</a>
                             </div>
                             <div class="card-description">
                                 {{news.description | safe}}

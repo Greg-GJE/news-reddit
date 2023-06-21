@@ -96,7 +96,7 @@
             <img src="{{news.banner.url}}" alt="{{news.title}}">
         </section>
         <section class="meta">
-            By {{news.author}} on {{news.published_at|date:"M d, Y"}} {{news.published_at|time:"H:i"}}
+            By <a href="{% url 'users:profile' username=news.author.username %}">{{news.author}}</a> on {{news.published_at|date:"M d, Y"}} {{news.published_at|time:"H:i"}}
         </section>
         <section id="content">
             <ul class="categories_section shadow_low">

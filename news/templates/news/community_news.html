@@ -90,7 +90,7 @@
                         <h1>{{liked_news.title}}</h1>
                     </div>
                     <div class="top_post__meta">
-                        <small>By {{liked_news.author.username}} on {{liked_news.published_at|date:"M d, Y"}} at {{liked_news.published_at|time:"H:i"}}</small>
+                        <small>By <a href="{% url 'users:profile' username=liked_news.author.username %}">{{liked_news.author.username}}</a> on {{liked_news.published_at|date:"M d, Y"}} at {{liked_news.published_at|time:"H:i"}}</small>
                     </div>
                     <div class="top_post__category">
                         {{liked_news.category}}
@@ -141,47 +141,47 @@
                 </div>
             </div>
             {% if community_news %}
-            <div class="section_content">
-                    {% for news in community_news %}
-                        <div class="card">
-                            <div class="card-img">
-                                <img src="{{news.banner.url}}" alt="{{news.title}}" loading="lazy">
-                            </div>
-                            <div class="card-body">
-                                <div class="card-title">
-                                    <h1>{{news.title | safe}}</h1>
+                <div class="section_content">
+                        {% for news in community_news %}
+                            <div class="card">
+                                <div class="card-img">
+                                    <img src="{{news.banner.url}}" alt="{{news.title}}" loading="lazy">
                                 </div>
-                                <div class="card-meta">
-                                    {{news.published_at|date:"M d, Y"}} {{news.published_at|time:"H:i"}}  | <span class="news_author">{{news.author.username}}</span>
-                                </div>
-                                <div class="card-description">
-                                    {{news.description | safe}}
-                                </div>
-                                <div class="card_footer">
-                                    <hr class="hr">
-                                    <div class="card-links">
-                                        <button class="read_more">
-                                            <a class="read_more_cta" href="{% url 'news:community_detail' slug=news.slug %}">Read More</a>
-                                        </button>
+                                <div class="card-body">
+                                    <div class="card-title">
+                                        <h1>{{news.title | safe}}</h1>
+                                    </div>
+                                    <div class="card-meta">
+                                        {{news.published_at|date:"M d, Y"}} {{news.published_at|time:"H:i"}}  | <a class="news_author" href="{% url 'users:profile' username=news.author.username %}">{{news.author.username}}</a>
+                                    </div>
+                                    <div class="card-description">
+                                        {{news.description | safe}}
+                                    </div>
+                                    <div class="card_footer">
+                                        <hr class="hr">
+                                        <div class="card-links">
+                                            <button class="read_more">
+                                                <a class="read_more_cta" href="{% url 'news:community_detail' slug=news.slug %}">Read More</a>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
 
 
 
-            </div>
+                </div>
             {% else %}
-            <div class="not_found_container">
-                <div class="image">
-                    <img src="{% static 'images/not_found.svg' %}" alt="">
+                <div class="not_found_container">
+                    <div class="image">
+                        <img src="{% static 'images/not_found.svg' %}" alt="">
+                    </div>
+                    <div class="not_found__content">
+                        Sorry! No news could be found!
+                    </div>
                 </div>
-                <div class="not_found__content">
-                    Sorry! No news could be found!
-                </div>
-            </div>
-        {% endif %}
+            {% endif %}
         </section>
     </main>
 
