@@ -303,5 +303,30 @@ def create_community_news(request):
             recent_community_news.save()
 
             return redirect(reverse('news:community'))
-        
+
     return render(request, 'news/news_create.html', context={'form': form})
+
+
+def community_search(request):
+    search_term = request.GET.get('search')
+    if search_term is not None and search_term != '':
+        # we search for the community news whose title contain the search_term
+        search_results = CommunityNews.objects.filter(title__icontains=search_term).order_by('-published_at')
+        total_results = search_results.count()
+
+        context = {
+            'term': search_term,
+            'count': total_results,
+            'search_results': search_results
+        }
+
+        return render(request, 'news/search_community_news.html', context=context)
+
+
+
+        pass
+    else:
+        return redirect(reverse('news:community'))
+
+
+    return render(request, 'news/search_community_news.html')

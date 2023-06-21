@@ -12,4 +12,5 @@ urlpatterns = [
     path('comment', views.add_comment, name='add_comment'),
     path('create', views.create_community_news, name='create'),
     path('community/<str:slug>', views.community_detail, name='community_detail'),
+    path('community/search/', views.community_search, name='community_search')
 ]
