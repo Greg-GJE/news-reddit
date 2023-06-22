@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Results</title>
-    <link rel="stylesheet" href="{% static 'news/css/search.css' %}">
+    <title>Search Results | {{term}}</title>
+    <link rel="stylesheet" href="{% static 'users/css/all.css' %}">
 </head>
 <body>
     <nav class="navbar">
@@ -17,8 +17,7 @@
                 </div>
             </div>
             <div class="navbar_right">
-                <form method="get" action="{% url 'news:search' %}">
-                    {% csrf_token %}
+                <form method="get" action="{% url 'users:search_profiles' %}">
                     <div class="search_container">
 
                         <svg width="32" height="32" class="DFW_E nT46U VETef" viewBox="0 0 24 24" version="1.1"
@@ -29,7 +28,7 @@
                             </path>
                         </svg>
 
-                        <input class="search" type="search" name="search" value="{{term}}" placeholder="search featured news">
+                        <input class="search" type="search" name="search" value="{{term}}" placeholder="search profiles">
                     </div>
                 </form>
             </div>
@@ -72,53 +71,54 @@
             </div>
         </div>
         <ul class="categories_section">
-            <li class="active"><a href="{% url 'news:index' %}">Featured</a></li>
+            <li><a href="{% url 'news:index' %}">Featured</a></li>
             <li><a href="{% url 'news:community' %}">Community</a></li>
-            <li><a href="{% url 'users:all' %}">Profiles</a></li>
+            <li class="active"><a href="{% url 'users:all' %}">Profiles</a></li>
         </ul>
     </nav>
+
     <main class="container">
         <div class="breadcrumb">
             <small>
-                <a href="{% url 'news:index' %}">home</a> <span> > </span> <span>{{term}}</span>
+                <a href="{% url 'news:index' %}">Home</a>
+                <span> > </span>
+                <span><a href="{% url 'users:all' %}">Profiles</a></span>
             </small>
         </div>
-        <section class="search_results">
+        <div class="profiles_section">
             <div class="section_header">
-                <h1>{{count}} result{{ count|pluralize }} for {{term}}</h1>
+                <h1 style="font-size: 2.7rem;">{{total_results}} results found for '{{term}}'</h1>
             </div>
-            <div class="section_content">
-                {% for news in search_results %}
-                    <div class="card">
-                        <div class="card-img">
-                            <img src="{{news.image_url}}" alt="{{news.title}}" loading="lazy">
+            <div class="profile_body">
+                {% for user in users %}
+                    <div class="profile_card">
+                        <div class="profile_image">
+                            <img src="{{user.profile.image.url}}" alt="{{user.username}} profile">
                         </div>
-                        <div class="card-body">
-                            <div class="card-title">
-                                <h1>{{news.title | safe}}</h1>
+                        <div class="profile_content">
+                            <div class="username_section">
+                                @{{user.username}}
                             </div>
-                            <div class="card-meta">
-                                {{news.published_date|date:"M d, Y"}} {{news.published_date|time:"H:i"}}  | <span class="news_author">{{news.author}}</span>
-                            </div>
-                            <div class="card-description">
-                                {{news.description | safe}}
-                            </div>
-                            <div class="card_footer">
-                                <hr class="hr">
-                                <div class="card-links">
-                                    <button class="read_more">
-                                        <a class="read_more_cta" target="_blank" href="{{news.url}}">
-                                        Go to Source</a>
-                                    </button>
-                                </div>
+                            <small class="fullname_section">
+                                {{user.first_name}} {{user.last_name}}
+                            </small>
+                            <div class="total_news">
+                                <span>{{user.news.count}}</span> news posted
                             </div>
                         </div>
-
+                        {% if request.user.is_authenticated %}
+                        <div class="goto_profile">
+                            <a class="read_more" style="color: #fff;" href="{% url 'users:profile' username=user.username  %}">See Profile</a>
+                        </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
-        </section>
+        </div>
     </main>
+
+
     <script src="{% static 'news/js/navbar.js'%}" defer></script>
+
 </body>
 </html>

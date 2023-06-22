@@ -153,7 +153,6 @@ def featured_news_detail(request, slug):
     r = requests.get(news.url, headers=headers, timeout=5)
     soup = BeautifulSoup(r.content, "html.parser")
 
-    # print(soup.prettify())
 
     content = []
     for paragraph in soup.find_all('p'):
@@ -322,11 +321,4 @@ def community_search(request):
 
         return render(request, 'news/search_community_news.html', context=context)
 
-
-
-        pass
-    else:
-        return redirect(reverse('news:community'))
-
-
-    return render(request, 'news/search_community_news.html')
+    return redirect(reverse('news:community'))

@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
+from django.db.models import Count
 
 from news.models import CommunityNews
 
@@ -15,7 +16,6 @@ from . import constants
 
 def index(request):
     return redirect(reverse('users:user_profile'))
-
 
 
 @login_required(login_url='/users/login')
@@ -113,6 +113,7 @@ def register_user(request):
         return redirect(reverse('news:index'))
     return None
 
+
 @login_required(login_url="/users/login")
 def delete_news(request):
     if request.method == 'POST':
@@ -128,6 +129,57 @@ def delete_news(request):
 
     return redirect(reverse('news:community'))
 
+
+def show_all_profiles(request):
+    user_model = get_user_model()
+
+    all_users = user_model.objects.alias(
+        news_count=Count('news')).order_by('-news_count')
+
+    total_users = all_users.count()
+
+    context = {
+        'users': all_users,
+        'total_results': total_users
+    }
+
+    return render(request, 'users/all_users.html', context=context)
+
+
+def search_profiles(request):
+    if request.method == 'GET':
+        if request.GET.get('search') is not None and request.GET.get('search') != '':
+            search_term = request.GET.get('search')
+
+            user_model = get_user_model()
+
+            searched_users = user_model.objects.filter(
+                username__icontains=search_term)
+
+            found_users = searched_users.count()
+
+            context = {
+                'users': searched_users,
+                'total_results': found_users,
+                'term': search_term
+            }
+
+            return render(request, 'users/search_profiles.html', context=context)
+
+    return redirect(reverse('users:all'))
+
+
 def logout_user(request):
     logout(request)
     return redirect(reverse('news:index'))
+
+
+@login_required(login_url='/users/login')
+def upload_avatar(request):
+    if request.method == 'POST' and request.user is not None:
+
+        current_profile = request.user.profile
+        current_profile.image = request.FILES.get('avatar')
+        current_profile.save()
+
+    return redirect(reverse('users:user_profile'))

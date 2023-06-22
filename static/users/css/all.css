@@ -162,10 +162,6 @@ svg:not(:root) {
 
 .profile_img_btn__cta2 {
   position: relative;
-  width: 42px;
-  height: 42px;
-  overflow: hidden;
-  border-radius: 50%;
 }
 
 .profile_img_btn__cta2::after {
@@ -178,11 +174,11 @@ svg:not(:root) {
 }
 
 .profile_img {
-  width: 100%;
-  object-fit: cover;
+  width: 40px;
+  height: 40px;
   vertical-align: middle;
   border-style: none;
-  aspect-ratio: 40 / 40;
+  aspect-ratio: auto 40 / 40;
   overflow-clip-margin: content-box;
   overflow: hidden;
   border-radius: 50%;
@@ -322,57 +318,6 @@ a:hover {
   margin: 1.2rem 0;
 }
 
-.business_headlines > .section_header,
-.tech_headlines > .section_header,
-.sports_headlines > .section_header {
-  padding-top: 2rem;
-}
-
-.section_content {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: minmax(100px, auto);
-  column-gap: 1.2rem;
-  row-gap: 2rem;
-}
-
-.card {
-  border: 1px solid #eee;
-  padding: 0.5rem 1rem 1.5rem 1rem;
-  border-radius: 10px;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  display: flex;
-  flex-direction: column;
-}
-
-.card-img {
-  display: block;
-  margin-bottom: 1rem;
-}
-
-.card-img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-.card-img img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 8px;
-  aspect-ratio: 16 / 9;
-}
-
-.card-body {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.card-description {
-  flex-grow: 1;
-}
-
 .card-meta {
   padding: 1rem 0;
   font-size: 0.9rem;
@@ -408,172 +353,52 @@ a:hover {
   border: solid 1px #999;
 }
 
-/* defining the news of the day */
-
-.header {
-  padding-bottom: 1.2rem;
+/* defining the profiles */
+.profiles_section {
+    width: 100%;
+    margin-top: 1.2rem;
+    padding: 0 0.5rem;
 }
 
-.top_post__heading {
-  font-size: 2.3rem;
-  margin-bottom: 2rem;
-}
-
-.top_post__body {
-  display: grid;
-  grid-template-columns: 3fr 4fr;
-  grid-auto-rows: minmax(100px, auto);
-  column-gap: 2rem;
-  row-gap: 1.2rem;
-}
-
-.top_post__img {
-  width: 100%;
-}
-
-.top_post__img img {
-  width: 100%;
-}
-
-.top_post__content {
-  margin-right: 1.2rem;
-}
-
-.top_post__title {
-  margin-bottom: 1.2rem;
-  font-size: 1.2rem;
-}
-
-.top_post__meta {
-  margin-bottom: 1.2rem;
-}
-
-.top_post__description {
-  margin-bottom: 1.2rem;
-  line-height: 1.6;
-}
-
-.top_post__category {
-  font-size: 0.9rem;
-  margin-bottom: 1.2rem;
-}
-
-.container_main {
-  min-width: 50%;
-  max-width: 70%;
-  margin: 0 auto;
-  margin-bottom: 2rem;
-  overflow: hidden;
-}
-
-/* defining the section header here */
-.section_header_section {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-select {
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  outline: none;
-  background: #fff;
-  border: 1px solid #eee;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-}
-
-.section_content {
-  margin-top: 1.2rem;
-}
-
-.not_found_container {
-  padding-top: 5rem;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.image {
-  width: 500px;
-  flex-grow: 1;
-  margin: 1.2rem auto;
-}
-
-.image > img {
-  width: 100%;
-  object-fit: cover;
-}
-
-.not_found__content {
-  margin-top: 2rem;
-  font-size: 1.2rem;
-  font-weight: 700;
-}
-
-/* designing the user section */
-
-.profile_section {
-  margin: 3rem 0 3rem 0;
-  display: flex;
-  flex-direction: row;
-}
-
-.profile_left {
-  margin-right: 1.2rem;
-  text-align: center;
+.profile_card {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    background-color: #fdfdfd;
+    align-items: center;
+    flex-direction: row;
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    margin: 3rem 0;
 }
 
 .profile_image {
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  position: relative;
-  background-size: cover;
-  background-position: center top;
+    width: 64px;
+    overflow: hidden;
 }
 
-
-input[type="file"] {
-  display: none;
+.profile_image img {
+    width: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    aspect-ratio: 32 / 32;
 }
 
-.image_upload_btn {
-  border: 1px solid #ccc;
-  display: inline-block;
-  padding: 6px 12px;
-  cursor: pointer;
-  margin-top: 1.2rem;
+.profile_content {
+    flex-grow: 1;
+    margin: 0.5rem 1.2rem;
+    border-left: 1px solid #111;
+    padding-left: 1.2rem;
 }
 
-.image_upload_btn:hover {
-  background-color: #eee;
+.username_section {
+    font-size: 1.2rem;
+    font-weight: 700;
 }
 
-.profile_right {
-  margin-left: 1.2rem;
+.fullname_section {
 }
 
-.profile_right h1 {
-  font-size: 3rem;
-}
-
-.full_name {
-  font-size: 1.2rem;
-  margin-bottom: 1.2rem;
-}
-
-.member {
-  font-size: 0.9rem;
-  color: #555;
-}
-
-hr {
-  border: 1px solid #eee;
-}
-
-.search_results {
-  margin-top: 3rem;
+.total_news {
+    padding-top: 1rem;
 }

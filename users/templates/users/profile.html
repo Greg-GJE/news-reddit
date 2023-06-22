@@ -18,8 +18,7 @@
                 </div>
             </div>
             <div class="navbar_right">
-                <form method="get" action="{% url 'news:community_search' %}">
-                    {% csrf_token %}
+                <form method="get" action="{% url 'users:search_profiles' %}">
                     <div class="search_container">
 
                         <svg width="32" height="32" class="DFW_E nT46U VETef" viewBox="0 0 24 24" version="1.1"
@@ -30,7 +29,7 @@
                             </path>
                         </svg>
 
-                        <input class="search" type="search" name="search" placeholder="search community news">
+                        <input class="search" type="search" name="search" placeholder="search profiles">
                     </div>
                 </form>
             </div>
@@ -85,17 +84,41 @@
     <main class="container">
         <div class="breadcrumb">
             <small>
-                <a href="{% url 'news:index' %}">home</a> <span> > </span> <span><a href="{% url 'users:profile' username=user.username %}">{{user.username}}</a></span>
+                <a href="{% url 'news:index' %}">Home</a>
+                <span> > </span>
+                <span><a href="{% url 'users:all' %}">Profiles</a></span>
+                <span> > </span>
+                <span><a href="{% url 'users:profile' username=user.username %}">{{user.username}}</a></span>
             </small>
         </div>
-        <div>
-            Username:
-            <p>{{user.username}}</p>
-            Profile Pic:
-            <p>
-                <img src="{{user.profile.image.url}}" alt="{{user.username}} profile image">
-            </p>
+        <div class="profile_section">
+            <div class="profile_left">
+                <div class="profile_image" style="background-image: url('{{user.profile.image.url}}')">
+                    <!-- <img src="{{user.profile.image.url}}" alt="{{user.username}} profile"> -->
+                </div>
+                {% if current %}
+                    <div class="profile_image_change_section">
+                        <form id="upload_avatar" class="upload_image_form" action="{% url 'users:upload_avatar' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label class="image_upload_btn" for="upload_image">
+                                <input type="file" name="avatar" id="upload_image" />
+                                Upload new image
+                            </label>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="profile_right">
+                <h1>@{{user.username}}</h1>
+                <div class="full_name">
+                    {{user.first_name}} {{user.last_name}}
+                </div>
+                <div class="member">
+                    Member since <span>{{user.date_joined|date:"M d, Y"}}</span>
+                </div>
+            </div>
         </div>
+        <hr>
         <div>
             {% if profile_news %}
             <section class="search_results">
@@ -160,5 +183,11 @@
         </div>
     </main>
 
+    <script src="{% static 'news/js/navbar.js'%}" defer></script>
+    <script>
+        document.getElementById('upload_image').addEventListener('change', (e) => {
+            document.getElementById('upload_avatar').submit();
+        })
+    </script>
 </body>
 </html>
