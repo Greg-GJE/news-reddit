@@ -140,12 +140,36 @@ form input {
     color: rgb(128, 0, 0);
 }
 
+.success {
+    display: flex;
+    padding: 0.3rem 0.5rem;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgb(0, 197, 174);
+    background-color: rgb(198, 255, 237);
+    color: rgb(2, 105, 64);
+}
 
+.remove_message_modal {
+    display: none;
+}
 
-.error button {
+.error button,
+.success button {
     background-color: transparent;
     border: none;
-    padding: 0.3rem 0.8rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.error-close {
+    color: rgb(128, 0, 0);
+}
+
+.success-close {
+    color: rgb(2, 105, 64);
+
 }
 
 .submit {

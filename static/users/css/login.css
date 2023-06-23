@@ -86,7 +86,7 @@ form input {
     color: rgb(128, 0, 0);
 }
 
-.error {
+.success {
     display: flex;
     padding: 0.3rem 0.5rem;
     flex-direction: row;
@@ -97,13 +97,25 @@ form input {
     color: rgb(2, 105, 64);
 }
 
-
+.remove_message_modal {
+    display: none;
+}
 
 .error button,
 .success button {
     background-color: transparent;
     border: none;
-    padding: 0.3rem 0.8rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.error-close {
+    color: rgb(128, 0, 0);
+}
+
+.success-close {
+    color: rgb(2, 105, 64);
+
 }
 
 svg:not(:root) {
