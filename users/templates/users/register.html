@@ -44,7 +44,7 @@
                         {% for message in messages %}
                             <small class="{{message.tags}}">
                                 <span>{{message}}</span>
-                                <button>X</button>
+                                <button id="close_message_modal" class="close_btn"><i class="fa {{message.tags}}-close">&#xf00d;</i></button>
                             </small>
                         {% endfor %}
                     </div>
@@ -83,6 +83,14 @@
             </div>
         </section>
     </main>
+
+
+    <script>
+        document.getElementById('close_message_modal').addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById('message_modal').classList.add('remove_message_modal');
+        })
+    </script>
 </body>
 
 </html>
