@@ -62,6 +62,10 @@
                                 <ul class="menu_content">
                                     <li class="menu_item">
                                         <a role="link" tabindex="-1" aria-disabled="false" class="logout__cta"
+                                            href="{% url 'users:user_profile' %}">Profile</a>
+                                    </li>
+                                    <li class="menu_item">
+                                        <a role="link" tabindex="-1" aria-disabled="false" class="logout__cta"
                                             href="{% url 'users:logout' %}">Logout @{{request.user.username}}</a>
                                     </li>
                                 </ul>
