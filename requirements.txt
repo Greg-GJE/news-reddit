@@ -4,15 +4,19 @@ beautifulsoup4==4.12.2
 certifi==2023.5.7
 charset-normalizer==3.1.0
 dill==0.3.6
+dj-database-url==2.1.0
 Django==4.2.2
+gunicorn==21.2.0
 idna==3.4
 isort==5.12.0
 lazy-object-proxy==1.9.0
 mccabe==0.7.0
 mysqlclient==2.1.1
 newsapi-python==0.2.7
+packaging==23.1
 Pillow==9.5.0
 platformdirs==3.5.3
+psycopg2-binary==2.9.7
 pylint==2.17.4
 pylint-django==2.5.3
 pylint-plugin-utils==0.8.2
@@ -20,5 +24,7 @@ requests==2.31.0
 soupsieve==2.4.1
 sqlparse==0.4.4
 tomlkit==0.11.8
+typing_extensions==4.7.1
 urllib3==2.0.3
+whitenoise==6.5.0
 wrapt==1.15.0
