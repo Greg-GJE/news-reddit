@@ -122,9 +122,21 @@ def populate_featured_news_database():
         # first of all delete all the records from the table
         FeaturedNews.objects.all().delete()
 
+        logger.info("Populating headlines")
+
         add_to_database_from_api(news_api_client, "headlines", country_code)
+
+
+        logger.info("Populating business news")
+
         add_to_database_from_api(news_api_client, "business", country_code)
+
+        logger.info("Populating technology news")
+
         add_to_database_from_api(news_api_client, "technology", country_code)
+
+        logger.info("Populating sports news")
+
         add_to_database_from_api(news_api_client, "sports", country_code)
 
 
