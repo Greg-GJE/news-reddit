@@ -15,8 +15,6 @@
                     <a href="{% url 'news:index' %}"><img class="navbar_logo_img"
                             src="{% static 'images/logo_header_black.svg' %}" alt=""></a>
                 </div>
-            </div>
-            <div class="navbar_right">
                 <form method="get" action="{% url 'news:search' %}">
                     {% csrf_token %}
                     <div class="search_container">
@@ -32,6 +30,8 @@
                         <input class="search" type="search" name="search" placeholder="search featured news">
                     </div>
                 </form>
+            </div>
+            <div class="navbar_right">
             </div>
             <div class="navbar_right__cta">
                 <a style="font-size: 0.9rem;" href="{% url 'news:index' %}">Home</a>
