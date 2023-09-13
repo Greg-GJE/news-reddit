@@ -23,8 +23,8 @@ class FeaturedNews(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True)
     author = models.CharField(
-        max_length=50, blank=True, null=True, default='Anonymous')
-    description = models.CharField(max_length=400)
+        max_length=255, blank=True, null=True, default='Anonymous')
+    description = models.TextField()
     content = models.TextField()
     category = models.CharField(max_length=20)
     url = models.URLField(max_length=400)
