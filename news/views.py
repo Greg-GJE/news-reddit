@@ -41,49 +41,53 @@ def fetch_country_code():
 def add_to_database_from_api(news_api_client, category, country_code):
     news_api_client = NewsApiClient(api_key=settings.NEWSAPI_KEY)
 
-    if category == 'headlines':
+    try:
 
-        top_news_response = news_api_client.get_top_headlines(
-            language='en', country=country_code.lower())
+        if category == 'headlines':
 
-        logger.log("Headlines response: %s", top_news_response)
+            top_news_response = news_api_client.get_top_headlines(
+                language='en', country=country_code.lower())
 
-    else:
-        top_news_response = news_api_client.get_top_headlines(
-            language='en', category=category, country=country_code.lower()
-        )
-    # max news
-    MAX_NEWS_EACH_CATEGORY = 6
+            logger.log("Headlines response: %s", top_news_response)
 
-    # first of all getting the top_news_response
-    if top_news_response is not None and top_news_response.get('articles') is not None:
-        current_total = 0
-        for top_news in top_news_response.get('articles'):
-            if current_total >= MAX_NEWS_EACH_CATEGORY:
-                break
-            if top_news.get('title') is not None and \
-                    top_news.get('description') is not None and \
-                    top_news.get('content') is not None:
-                if not FeaturedNews.objects.filter(slug=slugify(top_news.get('title'))):
-                    current_news = FeaturedNews(title=top_news.get('title'),
-                                                author=top_news.get(
-                                                    'author', 'anonymous'),
-                                                description=top_news.get(
-                        'description'),
-                        content=top_news.get(
-                        'content'),
-                        category=category,
-                        url=top_news.get('url'),
-                        image_url=top_news.get(
-                        'urlToImage'),
-                        published_date=parse_datetime(
-                        top_news.get('publishedAt'))
-                    )
-                    current_news.save()
-                    current_total += 1
-                else:
-                    continue
+        else:
+            top_news_response = news_api_client.get_top_headlines(
+                language='en', category=category, country=country_code.lower()
+            )
+        # max news
+        MAX_NEWS_EACH_CATEGORY = 6
 
+        # first of all getting the top_news_response
+        if top_news_response is not None and top_news_response.get('articles') is not None:
+            current_total = 0
+            for top_news in top_news_response.get('articles'):
+                if current_total >= MAX_NEWS_EACH_CATEGORY:
+                    break
+                if top_news.get('title') is not None and \
+                        top_news.get('description') is not None and \
+                        top_news.get('content') is not None:
+                    if not FeaturedNews.objects.filter(slug=slugify(top_news.get('title'))):
+                        current_news = FeaturedNews(title=top_news.get('title'),
+                                                    author=top_news.get(
+                                                        'author', 'anonymous'),
+                                                    description=top_news.get(
+                            'description'),
+                            content=top_news.get(
+                            'content'),
+                            category=category,
+                            url=top_news.get('url'),
+                            image_url=top_news.get(
+                            'urlToImage'),
+                            published_date=parse_datetime(
+                            top_news.get('publishedAt'))
+                        )
+                        current_news.save()
+                        current_total += 1
+                    else:
+                        continue
+
+    except Exception as exception:
+        logger.error("Exception %s", repr(exception))
 
 # Create your views here.
 def populate_featured_news_database():
