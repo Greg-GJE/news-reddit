@@ -26,14 +26,22 @@ logger = logging.getLogger("herokulogger")
 
 def fetch_country_code():
     # getting the geolocation response
-    geolocation_response = requests.get(
-        settings.GEOLOCATION_API_URL, verify=False, timeout=10)
 
-    logger.info("Geolocation response: %s", str(geolocation_response))
+    # keeping this external api call in a try-catch block in order to make sure application
+    # runs smoothly
 
-    if geolocation_response is not None and geolocation_response.content is not None:
-        data = json.loads(geolocation_response.content)
-        return data.get('country_code')
+    try:
+        geolocation_response = requests.get(
+            settings.GEOLOCATION_API_URL, verify=False, timeout=10)
+
+        logger.info("Geolocation response: %s", str(geolocation_response))
+
+        if geolocation_response is not None and geolocation_response.content is not None:
+            data = json.loads(geolocation_response.content)
+            return data.get('country_code')
+
+    except Exception as exception:
+        logger.error("exception happened during GEOLOCATION API call: %s", repr(exception))
 
     return None
 
