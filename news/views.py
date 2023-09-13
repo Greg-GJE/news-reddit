@@ -19,11 +19,17 @@ from django.contrib.auth.decorators import login_required
 from .models import FeaturedNews, Timestamp, CommunityNews, Comment
 from .forms import CommunityNewsCreateForm
 
+import logging
+
+logger = logging.getLogger("herokulogger")
+
 
 def fetch_country_code():
     # getting the geolocation response
     geolocation_response = requests.get(
         settings.GEOLOCATION_API_URL, verify=False, timeout=10)
+
+    logger.info("Geolocation response: %s", str(geolocation_response))
 
     if geolocation_response is not None and geolocation_response.content is not None:
         data = json.loads(geolocation_response.content)
@@ -110,6 +116,8 @@ def populate_featured_news_database():
             country_code = 'us'
 
         news_api_client = NewsApiClient(api_key=settings.NEWSAPI_KEY)
+
+        logger.info("Country code fetched: %s", country_code)
 
         # first of all delete all the records from the table
         FeaturedNews.objects.all().delete()
@@ -311,7 +319,7 @@ def community_search(request):
     if search_term is not None and search_term != '':
         # we search for the community news whose title contain the search_term
         search_results = CommunityNews.objects.filter(title__icontains=search_term).order_by('-published_at')
-        total_results = search_results.count()  
+        total_results = search_results.count()
 
         context = {
             'term': search_term,

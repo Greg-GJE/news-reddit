@@ -11,8 +11,6 @@ from news.models import CommunityNews
 
 from . import constants
 
-# Create your views here.
-
 
 def index(request):
     return redirect(reverse('users:user_profile'))
