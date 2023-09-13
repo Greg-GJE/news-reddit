@@ -311,7 +311,7 @@ def community_search(request):
     if search_term is not None and search_term != '':
         # we search for the community news whose title contain the search_term
         search_results = CommunityNews.objects.filter(title__icontains=search_term).order_by('-published_at')
-        total_results = search_results.count()
+        total_results = search_results.count()  
 
         context = {
             'term': search_term,
