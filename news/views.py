@@ -45,6 +45,9 @@ def add_to_database_from_api(news_api_client, category, country_code):
 
         top_news_response = news_api_client.get_top_headlines(
             language='en', country=country_code.lower())
+
+        logger.log("Headlines response: %s", top_news_response)
+
     else:
         top_news_response = news_api_client.get_top_headlines(
             language='en', category=category, country=country_code.lower()
